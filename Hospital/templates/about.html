@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About Us | Health Center Management{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row align-items-center hms-card p-4 p-md-5 mx-1">
+        <div class="col-md-8 mx-auto text-center">
+            <h2 class="fw-bold mb-4 text-primary-custom">About Our Medical Facility</h2>
+            <p class="lead mb-4 text-muted-custom">
+                A premier health center dedicated to providing exceptional, enterprise-grade medical care to the community.
+            </p>
+            <p class="text-muted-custom">
+                We leverage modern infrastructure and a team of board-certified specialists to ensure every patient receives the highest standard of treatment. Our goal is to streamline healthcare delivery with precision, compassion, and professionalism.
+            </p>
+            <a href="{% url 'doctors' %}" class="btn btn-outline-secondary mt-4 px-4 fw-semibold">View Medical Staff</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

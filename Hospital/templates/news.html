@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}News & Updates | Health Center Management{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="mb-5 border-bottom pb-3">
+        <h2 class="fw-bold text-primary-custom m-0">Medical News & Insights</h2>
+        <p class="text-muted-custom mt-2 mb-0">Stay informed with the latest updates in healthcare, research, and facility announcements.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="hms-card overflow-hidden h-100">
+                <img src="/static/asset/images/news-image1.jpg" class="w-100" alt="Medical Technology" style="height: 180px; object-fit: cover; border-bottom: 1px solid var(--border-color);">
+                <div class="p-4">
+                    <span class="d-block mb-2 text-primary-custom fw-semibold small text-uppercase">March 08, 2024</span>
+                    <h5 class="fw-bold mb-3 text-dark">Advancements in Imaging Tech</h5>
+                    <p class="mb-4 text-muted-custom small">Implementing state-of-the-art MRI and CT scanning equipment to improve diagnostic accuracy and patient comfort.</p>
+                    <div class="d-flex align-items-center pt-3 border-top">
+                        <div class="rounded-circle me-3 bg-secondary" style="width: 32px; height: 32px;"></div>
+                        <div>
+                            <p class="mb-0 fw-bold small text-dark">Jeremie Carlson</p>
+                            <p class="mb-0 text-muted-custom" style="font-size: 0.7rem; text-transform: uppercase;">Facility Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hms-card overflow-hidden h-100">
+                <img src="/static/asset/images/news-image2.jpg" class="w-100" alt="Healing Process" style="height: 180px; object-fit: cover; border-bottom: 1px solid var(--border-color);">
+                <div class="p-4">
+                    <span class="d-block mb-2 text-primary-custom fw-semibold small text-uppercase">February 20, 2024</span>
+                    <h5 class="fw-bold mb-3 text-dark">New Outpatient Recovery Protocols</h5>
+                    <p class="mb-4 text-muted-custom small">Streamlined recovery procedures designed to reduce hospital stay duration and improve home-care transitional support.</p>
+                    <div class="d-flex align-items-center pt-3 border-top">
+                        <div class="rounded-circle me-3 bg-secondary" style="width: 32px; height: 32px;"></div>
+                        <div>
+                            <p class="mb-0 fw-bold small text-dark">Dr. Jason Stewart</p>
+                            <p class="mb-0 text-muted-custom" style="font-size: 0.7rem; text-transform: uppercase;">Chief of Medicine</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hms-card overflow-hidden h-100">
+                <img src="/static/asset/images/news-image3.jpg" class="w-100" alt="Research" style="height: 180px; object-fit: cover; border-bottom: 1px solid var(--border-color);">
+                <div class="p-4">
+                    <span class="d-block mb-2 text-primary-custom fw-semibold small text-uppercase">January 27, 2024</span>
+                    <h5 class="fw-bold mb-3 text-dark">Annual Medical Research Review</h5>
+                    <p class="mb-4 text-muted-custom small">A comprehensive look at our participation in national clinical trials and our commitment to medical innovation.</p>
+                    <div class="d-flex align-items-center pt-3 border-top">
+                        <div class="rounded-circle me-3 bg-secondary" style="width: 32px; height: 32px;"></div>
+                        <div>
+                            <p class="mb-0 fw-bold small text-dark">Andrio Abero</p>
+                            <p class="mb-0 text-muted-custom" style="font-size: 0.7rem; text-transform: uppercase;">Research Director</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

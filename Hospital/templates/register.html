@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Patient Registration | Health Center{% endblock %}
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 75vh;">
+    <div class="col-md-7 col-lg-5">
+        <div class="hms-card p-4 p-md-5 my-5 border-0">
+            <div class="text-center mb-5">
+                <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle mb-3 shadow-sm" style="width: 56px; height: 56px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+                </div>
+                <h3 class="fw-bold mb-2">Create an Account</h3>
+                <p class="text-muted-custom">Join our health center to manage your appointments seamlessly.</p>
+            </div>
+            
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} py-3 text-center mb-4" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="form-label" for="username">Choose a Username</label>
+                    <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="e.g. johndoe123" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="mb-5">
+                    <label class="form-label d-flex justify-content-between" for="password">
+                        <span>Password</span>
+                        <span class="text-muted-custom fw-normal small">Min 8 chars</span>
+                    </label>
+                    <input type="password" class="form-control form-control-lg" id="password" name="password" minlength="8" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100 py-3 mb-4">Register Account</button>
+            </form>
+            
+            <div class="text-center pt-3 border-top">
+                <p class="text-muted-custom mb-0">Already registered? <a href="{% url 'log' %}" class="text-primary-custom fw-bold text-decoration-none">Sign in here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

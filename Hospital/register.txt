@@ -1,0 +1,15 @@
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+        is_doctor = request.POST.get('is_doctor', False)  # Check if the 'is_doctor' checkbox is selected
+        m_password=make_password(password)
+        # Create a new user
+        user = CustomUser.objects.create(username=username, password=m_password, email=email, is_doctor=is_doctor)
+        # If the user chose to register as a doctor, you can perform additional actions here
+
+        messages.success(request, 'Registration successful. You can now log in.')
+        return redirect('log')
+
+    return render(request, 'register.html')

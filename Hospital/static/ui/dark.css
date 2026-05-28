@@ -1,0 +1,27 @@
+/* Dark mode overrides */
+body.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+.dark-mode .navbar {
+  background: rgba(0,0,0,0.7);
+}
+
+.dark-mode .card {
+  background: rgba(30,30,30,0.8);
+  color: #e0e0e0;
+}
+
+.dark-mode .btn {
+  background: #424242;
+  color: #fff;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+  background: #2c2c2c;
+  color: #e0e0e0;
+  border-color: #555;
+}

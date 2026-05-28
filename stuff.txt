@@ -1,0 +1,793 @@
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .models import Appointment
+
+def appointment_view(request):
+    print("hhhhhhhhhhhhhhhhhhhhhh")
+    if request.method == 'POST':
+        print("hiiiiii")
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        date = request.POST.get('date')
+        department = request.POST.get('department')
+        phone = request.POST.get('phone')
+        message = request.POST.get('message')
+
+        # Create a new Appointment instance and save it to the database
+        appointment = Appointment.objects.create(
+            name=name,
+            email=email,
+            date=date,
+            department=department,
+            phone=phone,
+            message=message
+        )
+
+        return HttpResponse(f"Appointment for {appointment.name} on {appointment.date} in {appointment.department} created successfully.")
+        # You can redirect to a success page instead of returning an HttpResponse if needed
+    else:
+        return render(request, 'success.html')
+
+
+
+# success.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Success</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        .invoice-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .invoice-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Appointment made successfully!</h1>
+        <a href="#" class="invoice-btn" id="generateInvoiceBtn">Generate Invoice</a>
+    </div>
+
+    <script>
+        document.getElementById('generateInvoiceBtn').addEventListener('click', function() {
+            generateInvoice();
+        });
+
+        function generateInvoice() {
+            var appointmentData = {
+                patientName: 'John Doe',
+                appointmentDate: '2024-03-07',
+                services: ['Consultation', 'Treatment'],
+                totalCost: 150.00,
+            };
+
+            var invoiceContent = `
+                <h2>Invoice</h2>
+                <p><strong>Patient Name:</strong> ${appointmentData.patientName}</p>
+                <p><strong>Appointment Date:</strong> ${appointmentData.appointmentDate}</p>
+                <p><strong>Services:</strong> ${appointmentData.services.join(', ')}</p>
+                <p><strong>Total Cost:</strong> $${appointmentData.totalCost.toFixed(2)}</p>
+                <p>Thank you for choosing our services!</p>
+            `;
+
+            var invoiceWindow = window.open('', '_blank');
+            invoiceWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Invoice</title>
+                    <style>
+                        body {
+                            font-family: 'Arial', sans-serif;
+                            margin: 20px;
+                        }
+                        h2 {
+                            color: #4CAF50;
+                        }
+                        p {
+                            margin-bottom: 10px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${invoiceContent}
+                </body>
+                </html>
+            `);
+            invoiceWindow.document.close();
+        }
+    </script>
+</body>
+</html>
+
+
+
+views.py
+from django.http import JsonResponse
+from .models import Appointment
+
+def latest_appointment_api(request):
+    try:
+        # Fetch the latest appointment from the database
+        latest_appointment = Appointment.objects.latest('date')
+        
+        # Prepare data to be sent as JSON
+        appointment_data = {
+            'patientName': latest_appointment.name,
+            'appointmentDate': str(latest_appointment.date),
+            'services': ['Consultation', 'Treatment'],  # Replace with actual services
+            'totalCost': 150.00,  # Replace with actual cost
+        }
+
+        return JsonResponse(appointment_data)
+    except Appointment.DoesNotExist:
+        return JsonResponse({'error': 'No appointments found.'}, status=404)
+
+
+latest_appointment_api
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Success</title>
+    <style>
+        /* Your existing styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        .invoice-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .invoice-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="card" style="max-width: 400px; margin: 20px auto; padding: 20px; background-color: #f8f8f8; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <h1 style="color: #333; text-align: center;">Appointment made successfully!</h1>
+        <a href="#" class="invoice-btn" id="generateInvoiceBtn" style="display: block; margin: 20px auto; padding: 10px 20px; background-color: #4CAF50; color: white; text-align: center; text-decoration: none; border-radius: 5px; cursor: pointer;">Generate Invoice</a>
+    </div>
+
+    <script>
+        document.getElementById('generateInvoiceBtn').addEventListener('click', function() {
+            fetchAppointmentData();
+        });
+
+        function generateInvoice(appointmentData) {
+            if (appointmentData.error) {
+                console.error(appointmentData.error);
+                return;
+            }
+
+            var invoiceContent = `
+                <h2>Invoice</h2>
+                <p><strong>Patient Name:</strong> ${appointmentData.patientName}</p>
+                <p><strong>Appointment Date:</strong> ${appointmentData.appointmentDate}</p>
+                <p><strong>Services:</strong> ${appointmentData.services.join(', ')}</p>
+                <p><strong>Total Cost:</strong> $${appointmentData.totalCost.toFixed(2)}</p>
+                <p>Thank you for choosing our services!</p>
+            `;
+
+            var invoiceWindow = window.open('', '_blank');
+            invoiceWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Invoice</title>
+                    <style>
+                        /* Your existing styles */
+                        
+                    </style>
+                </head>
+                <body>
+                    ${invoiceContent}
+                </body>
+                </html>
+            `);
+            invoiceWindow.document.close();
+        }
+
+        function fetchAppointmentData() {
+            // Make an AJAX request to your Django server to fetch appointment data
+            fetch('/api/latest_appointment/')
+                .then(response => response.json())
+                .then(data => generateInvoice(data))
+                .catch(error => console.error('Error fetching appointment data:', error));
+        }
+    </script>
+</body>
+</html>
+
+
+
+#login views.py
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        try:
+            user = CustomUser.objects.get(username=username)
+            if check_password(password, user.password):
+                # Implement your login logic here
+                return redirect('index')
+            else:
+                # Incorrect password
+                return render(request, 'login.html', {'error': 'Invalid username or password'})
+        except CustomUser.DoesNotExist:
+            # User does not exist
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+
+    return render(request, 'login.html')
+
+
+
+
+
+
+
+
+
+
+-------------
+
+def login(request):
+    if request.method == 'POST':
+        login_type = request.POST.get('login_type')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Check if the user belongs to the selected login type
+            if login_type == 'doctor' and user.is_doctor:
+                login(request, user)
+                messages.success(request, 'Doctor login successful.')
+                return redirect('doctor_dashboard.html')  # Change 'doctor_dashboard' to your desired URL for doctor dashboard
+            elif login_type == 'patient' and user.is_patient:
+                login(request, user)
+                messages.success(request, 'Patient login successful.')
+                return redirect('index.html')  # Change 'index' to your desired URL for patient dashboard
+            else:
+                messages.error(request, 'Invalid login type for the selected user.')
+        else:
+            # User authentication failed
+            messages.error(request, 'Invalid username or password.')
+
+
+
+
+
+
+
+
+--------------------
+register views.py
+
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+
+        hashed_password = make_password(password)
+
+        user = CustomUser(username=username, password=hashed_password, email=email)
+        user.save()
+
+        return redirect('index')
+
+    return render(request, 'register.html')
+
+
+
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+        is_doctor = request.POST.get('is_doctor')
+
+        User = get_user_model()
+
+        user = User.objects.create_user(username=username, password=password, email=email)
+
+        if is_doctor and request.user.is_superuser:
+            user.is_doctor = True
+            user.save()
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Registration successful.')
+            return redirect('index')
+
+    return render(request, 'register.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # User authentication successful
+            auth_login(request, user)
+
+            if user.is_doctor:
+                return redirect('doctor_dashboard.html')  # Replace with the actual URL for doctor dashboard
+            elif user.is_patient:
+                return redirect('index.html')  # Replace with the actual URL for patient dashboard
+            else:
+                # Handle other user roles or default redirect
+                return redirect('index')
+
+        else:
+            # User authentication failed
+            messages.error(request, 'Invalid username or password.')
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+
+    # Render the login page for GET requests
+    return render(request, 'login.html')
+
+
+
+
+
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # User authentication successful
+            auth_login(request, user)
+
+            if user.is_doctor:
+                return redirect('doctor_dashboard')  # Replace with the actual URL for the doctor dashboard
+            elif user.is_patient:
+                return redirect('index')  # Replace with the actual URL for the patient dashboard
+            else:
+                # Handle other user roles or default redirect
+                return redirect('index')
+
+        else:
+            # User authentication failed
+            messages.error(request, 'Invalid username or password.')
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+
+    return render(request, 'login.html')
+
+
+
+
+
+
+
+
+
+def doctor_login(request):
+    if request.method == 'POST':
+        name = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, name=name, password=password)
+
+        if user is not None:
+            auth_login(request, user)
+
+            # Check if the user is a doctor
+            if is_doctor(user):
+                return redirect('doctor_dashboard')  # Redirect to the doctor_dashboard if the user is a doctor
+
+            # For simplicity, redirect other users to the patient dashboard
+            return redirect('index')  # Replace with the actual URL for the patient dashboard
+
+        else:
+            messages.error(request, 'Invalid username or password.')
+            return render(request, 'doctor_login.html', {'error': 'Invalid username or password'})
+
+    return render(request, 'doctor_login.html')
+
+
+
+
+class Doctor(models.Model):
+    name = models.CharField(max_length=255)
+    specialty = models.CharField(max_length=255)
+    password = models.CharField(max_length=50, default='some_default_value')
+    image = models.ImageField(upload_to='doctors/')
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+
+
+
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class CustomUser(AbstractUser):
+    
+    USER_TYPE_CHOICES = (
+        ('admin', 'Admin'),
+        ('doctor', 'Doctor'),
+        ('patient', 'patient'),
+    
+    )
+
+    user_type = models.CharField(max_length=15, choices=USER_TYPE_CHOICES, default='patient')
+
+
+
+
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('admin', 'Admin'),
+        ('doctor', 'Doctor'),
+        ('patient', 'Patient'),
+    )
+
+    user_type = models.CharField(max_length=15, choices=USER_TYPE_CHOICES, default='patient')
+
+class Doctor(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, default=1)  # Change '1' to the appropriate user ID
+    name = models.CharField(max_length=255)
+    specialty = models.CharField(max_length=255)
+    password = models.CharField(max_length=50, default='some_default_value')
+    image = models.ImageField(upload_to='doctors/')
+
+    def __str__(self):
+        return self.name
+
+
+
+class User(models.Model):
+    username = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    is_doctor = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.username
+
+
+
+class Appointment(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    date = models.DateField()
+    department_choices = [
+        ('general_health', 'General Health'),
+        ('cardiology', 'Cardiology'),
+        ('dental', 'Dental'),
+        ('medical_research', 'Medical Research'),
+    ]
+    department = models.CharField(max_length=50, choices=department_choices)
+    phone = models.CharField(max_length=15)
+    message = models.TextField()
+
+   
+
+
+
+
+
+
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('admin', 'Admin'),
+        ('doctor', 'Doctor'),
+        ('patient', 'Patient'),
+    )
+
+    user_type = models.CharField(max_length=15, choices=USER_TYPE_CHOICES, default='patient')
+
+class Doctor(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, default="")
+    name = models.CharField(max_length=255)
+    specialty = models.CharField(max_length=255)
+    password = models.CharField(max_length=50, default='some_default_value')
+    image = models.ImageField(upload_to='doctors/')
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class CustomUser(AbstractUser):
+    
+    USER_TYPE_CHOICES = (
+        ('admin', 'Admin'),
+        ('doctor', 'Doctor'),
+        ('patient', 'patient'),
+    
+    )
+
+    user_type = models.CharField(max_length=15, choices=USER_TYPE_CHOICES, default='patient')
+
+
+class Doctor(models.Model):
+    id = models.AutoField(primary_key=True, default=1)  # Manually defining a default value
+    name = models.CharField(max_length=255)
+    specialty = models.CharField(max_length=255)
+    password = models.CharField(max_length=50, default='some_default_value')
+    image = models.ImageField(upload_to='doctors/')
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+
+
+
+
+ef doctor_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            auth_login(request, user)
+
+            # Check if the user is a doctor
+            if is_doctor(user):
+                return redirect('doctor_dashboard')  # Redirect to the doctor_dashboard if the user is a doctor
+
+            # For simplicity, redirect other users to the patient dashboard
+            return redirect('index')  # Replace with the actual URL for the patient dashboard
+
+        else:
+            messages.error(request, 'Invalid username or password.')
+            return render(request, 'doctor_login.html', {'error': 'Invalid username or password'})
+
+    return render(request, 'doctor_login.html')
+
+def is_doctor(user):
+    # Check if the user is a doctor based on the Doctor model
+    try:
+        doctor = Doctor.objects.get(name=user.username)
+        return True
+    except Doctor.DoesNotExist:
+        return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login
+from .models import Doctor
+
+def doctor_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            auth_login(request, user)
+
+            # Check if the user is a doctor
+            if is_doctor(user):
+                return redirect('doctor_dashboard')  # Redirect to the doctor_dashboard if the user is a doctor
+
+            # For simplicity, redirect other users to the patient dashboard
+            return redirect('doctor_dashboard')  # Replace with the actual URL for the patient dashboard
+
+        else:
+            messages.error(request, 'Invalid username or password.')
+            return render(request, 'doctor_login.html', {'error': 'Invalid username or password'})
+
+    return render(request, 'doctor_login.html')
+
+def is_doctor(user):
+    # Check if the user is a doctor based on the Doctor model
+    try:
+        doctor = Doctor.objects.get(name=user.username)
+        return True
+    except Doctor.DoesNotExist:
+        return False
+
+--------------------------
+
+
+import re
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import CustomUser
+
+def register(request):
+    if request.method == 'POST':
+        # Retrieve form data
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        # Validate username
+        if not is_valid_username(username):
+            messages.error(request, 'Invalid username format.')
+            return redirect('register')
+
+        # Validate email
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.error(request, 'Invalid email address.')
+            return redirect('register')
+
+        # Validate password
+        if not is_valid_password(password):
+            messages.error(request, 'Password must be at least 8 characters long.')
+            return redirect('register')
+
+        # Check if username or email already exists
+        if CustomUser.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists.')
+            return redirect('register')
+
+        if CustomUser.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists.')
+            return redirect('register')
+
+        # Create user
+        try:
+            user = CustomUser.objects.create_user(username=username, email=email)
+            user.set_password(password)
+            user.save()
+            messages.success(request, 'User registered successfully!')
+            return redirect('log')  # Redirect to the 'log' page upon successful registration
+        except Exception as e:
+            messages.error(request, 'An error occurred. Please try again.')
+            return redirect('register')
+
+    # If it's a GET request or form submission failed, render the registration form
+    return render(request, 'register.html')

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Email</title>
+</head>
+<body>
+    <!-- Container for the image -->
+    <div id="image-container">
+        <a href="/static/assets/images/behavep.jpg" target="_blank">
+            <img src="/static/assets/images/behavep.jpg" alt="Behavep Image" width="300" height="200">
+        </a>
+    </div>
+    <form id="changeEmailForm">
+        <input type="email" name="new_email" placeholder="New Email Address" required>
+        <button type="submit">Change Email</button>
+    </form>
+    <script>
+        $(document).ready(function() {
+            $('#changeEmailForm').submit(function(e) {
+                e.preventDefault();
+                
+                var form = $(this);
+                var url = form.attr('action');
+                var formData = form.serialize();
+                
+                $.post(url, formData, function(data) {
+                    if (data.success) {
+                        alert(data.message);
+                        // You can redirect the user to a different page or perform any other action here
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                });
+            });
+        });
+        
+    </script>
+</body>
+</html>

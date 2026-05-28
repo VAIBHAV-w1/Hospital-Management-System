@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Health Center - Home{% endblock %}
+{% block content %}
+
+<!-- 1. HERO SECTION -->
+<div class="hero-section text-center position-relative">
+    <div class="container position-relative z-1">
+        <span class="hero-badge">Next Generation Healthcare</span>
+        <h1 class="display-3 mx-auto mb-4" style="max-width: 900px; line-height: 1.1;">
+            Enterprise medical care, <br>
+            <span style="color: var(--primary-color);">simplified for you.</span>
+        </h1>
+        <p class="lead mx-auto mb-5 text-muted-custom" style="max-width: 650px; font-size: 1.15rem; line-height: 1.6;">
+            Book appointments instantly with certified specialists. Experience world-class hospital management designed around your well-being.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#appointment" class="btn btn-primary btn-lg rounded-pill px-5 shadow-lg">Book Consultation</a>
+            <a href="#doctors" class="btn btn-outline-secondary btn-lg rounded-pill px-5 bg-white shadow-sm" style="background-color: var(--card-bg) !important;">Meet the Team</a>
+        </div>
+    </div>
+    <!-- Background Accents -->
+    <div class="position-absolute top-0 start-50 translate-middle-x w-100 h-100" style="z-index: 0; background: radial-gradient(circle at 50% 0%, rgba(37,99,235,0.08) 0%, transparent 60%); pointer-events: none;"></div>
+</div>
+
+<!-- 2. ABOUT US SECTION -->
+<div id="about" class="container py-5 mb-5">
+    <div class="row align-items-center hms-card p-5 mx-1 border-0">
+        <div class="col-md-10 mx-auto text-center">
+            <h2 class="fw-bold mb-4 text-primary-custom">Welcome to Your Health Center</h2>
+            <p class="lead mb-4" style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.8;">
+                Welcome to your trusted health center provider, committed to delivering exceptional medical services to our community.
+            </p>
+            <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7;">
+                We prioritize patient care and strive to ensure every individual receives the highest standard of treatment and support. Our modern facilities, cutting-edge technology, and dedicated professionals are here to make your life healthier and happier.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- 3. DOCTORS SECTION -->
+<div id="doctors" class="container py-5 mb-5">
+    <div class="text-center mb-5">
+        <h2 class="display-6 fw-bold">Our Medical Specialists</h2>
+        <p class="lead" style="color: var(--text-secondary);">Expert care tailored for your well-being.</p>
+    </div>
+    
+    <div class="row g-5">
+        {% if not doctors %}
+        <!-- Static fallback if DB is empty -->
+        <div class="col-md-4">
+            <div class="hms-card text-center p-4 p-lg-5 h-100 border-0">
+                <img src="/static/asset/images/team-image1.jpg" class="rounded-circle mb-4 shadow-md" width="140" height="140" style="object-fit: cover;" alt="Nate Baston">
+                <h4 class="fw-bold mb-2">Dr. Nate Baston</h4>
+                <p class="mb-4" style="color: var(--primary-color); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">General Health</p>
+                <div style="font-size: 0.95rem; color: var(--text-secondary);">
+                    <p class="mb-2">📞 (886) 776-8430</p>
+                    <p class="mb-0">✉️ n.baston@company.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hms-card text-center p-4 p-lg-5 h-100 border-0">
+                <img src="/static/asset/images/team-image2.jpg" class="rounded-circle mb-4 shadow-md" width="140" height="140" style="object-fit: cover;" alt="Jason Stewart">
+                <h4 class="fw-bold mb-2">Dr. Jason Stewart</h4>
+                <p class="mb-4" style="color: var(--primary-color); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Cardiology</p>
+                <div style="font-size: 0.95rem; color: var(--text-secondary);">
+                    <p class="mb-2">📞 (831) 079-3003</p>
+                    <p class="mb-0">✉️ j.stewart@company.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hms-card text-center p-4 p-lg-5 h-100 border-0">
+                <img src="/static/asset/images/team-image3.jpg" class="rounded-circle mb-4 shadow-md" width="140" height="140" style="object-fit: cover;" alt="Miasha Nakahara">
+                <h4 class="fw-bold mb-2">Dr. Miasha Nakahara</h4>
+                <p class="mb-4" style="color: var(--primary-color); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Dental</p>
+                <div style="font-size: 0.95rem; color: var(--text-secondary);">
+                    <p class="mb-2">📞 (829) 683-5142</p>
+                    <p class="mb-0">✉️ m.nakahara@company.com</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Dynamic doctors from DB -->
+        {% for doctor in doctors %}
+        <div class="col-md-4">
+            <div class="hms-card text-center p-4 p-lg-5 h-100 border-0">
+                <div class="mb-4 rounded-circle mx-auto d-flex align-items-center justify-content-center shadow-md" style="width: 140px; height: 140px; background-color: rgba(37,99,235,0.1); font-size: 3rem; color: var(--primary-color); font-weight: 300;">
+                    {{ doctor.name|make_list|first|default:"D"|upper }}
+                </div>
+                <h4 class="fw-bold mb-2">{{ doctor.name }}</h4>
+                <p class="mb-0" style="color: var(--primary-color); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">{{ doctor.specialization|default:"Specialist" }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<!-- 4. NEWS SECTION -->
+<div id="news" class="container py-5 mb-5">
+    <div class="text-center mb-5">
+        <h2 class="display-6 fw-bold">Latest Medical News</h2>
+        <p class="lead" style="color: var(--text-secondary);">Stay updated with the latest in healthcare and research.</p>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-md-4">
+            <div class="hms-card overflow-hidden h-100 border-0">
+                <img src="/static/asset/images/news-image1.jpg" class="w-100" alt="News 1" style="height: 220px; object-fit: cover;">
+                <div class="p-4 p-lg-5">
+                    <span class="d-block mb-3" style="color: var(--primary-color); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">March 08, 2026</span>
+                    <h4 class="fw-bold mb-3">About Amazing Technology</h4>
+                    <p class="mb-4" style="color: var(--text-secondary); line-height: 1.6;">Implementing state-of-the-art MRI and CT scanning equipment to improve diagnostic accuracy and patient comfort across our facilities.</p>
+                    <div class="d-flex align-items-center pt-4 border-top" style="border-color: var(--border-color) !important;">
+                        <div class="rounded-circle me-3" style="width: 44px; height: 44px; background-color: var(--border-color);"></div>
+                        <div>
+                            <p class="mb-0 fw-bold text-dark" style="font-size: 0.9rem;">Jeremie Carlson</p>
+                            <p class="mb-0" style="color: var(--text-secondary); font-size: 0.8rem;">CEO / Founder</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hms-card overflow-hidden h-100 border-0">
+                <img src="/static/asset/images/news-image2.jpg" class="w-100" alt="News 2" style="height: 220px; object-fit: cover;">
+                <div class="p-4 p-lg-5">
+                    <span class="d-block mb-3" style="color: var(--primary-color); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">February 20, 2026</span>
+                    <h4 class="fw-bold mb-3">Introducing a new healing process</h4>
+                    <p class="mb-4" style="color: var(--text-secondary); line-height: 1.6;">Streamlined outpatient recovery procedures designed to significantly reduce hospital stay duration and improve home-care support.</p>
+                    <div class="d-flex align-items-center pt-4 border-top" style="border-color: var(--border-color) !important;">
+                        <div class="rounded-circle me-3" style="width: 44px; height: 44px; background-color: var(--border-color);"></div>
+                        <div>
+                            <p class="mb-0 fw-bold text-dark" style="font-size: 0.9rem;">Dr. Jason Stewart</p>
+                            <p class="mb-0" style="color: var(--text-secondary); font-size: 0.8rem;">General Director</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hms-card overflow-hidden h-100 border-0">
+                <img src="/static/asset/images/news-image3.jpg" class="w-100" alt="News 3" style="height: 220px; object-fit: cover;">
+                <div class="p-4 p-lg-5">
+                    <span class="d-block mb-3" style="color: var(--primary-color); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">January 27, 2026</span>
+                    <h4 class="fw-bold mb-3">Review Annual Medical Research</h4>
+                    <p class="mb-4" style="color: var(--text-secondary); line-height: 1.6;">A comprehensive look at our participation in national clinical trials and our ongoing commitment to global medical innovation.</p>
+                    <div class="d-flex align-items-center pt-4 border-top" style="border-color: var(--border-color) !important;">
+                        <div class="rounded-circle me-3" style="width: 44px; height: 44px; background-color: var(--border-color);"></div>
+                        <div>
+                            <p class="mb-0 fw-bold text-dark" style="font-size: 0.9rem;">Andrio Abero</p>
+                            <p class="mb-0" style="color: var(--text-secondary); font-size: 0.8rem;">Research Director</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 5. APPOINTMENT SECTION -->
+<div id="appointment" class="container py-5 mb-5">
+    <div class="row align-items-center g-0 hms-card border-0 p-0 overflow-hidden shadow-premium">
+        <!-- Image Side -->
+        <div class="col-md-5 d-none d-md-block h-100 bg-light position-relative" style="min-height: 650px;">
+            <img src="/static/asset/images/appointment-image.jpg" class="position-absolute w-100 h-100" style="object-fit: cover;" alt="Hospital Reception" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\' viewBox=\'0 0 100 100\' preserveAspectRatio=\'none\'%3E%3Crect fill=\'%23f1f5f9\' width=\'100%25\' height=\'100%25\'/%3E%3Cpath d=\'M0,100 L100,0 L100,100 Z\' fill=\'rgba(37,99,235,0.05)\'/%3E%3C/svg%3E'">
+            <div class="position-absolute bottom-0 start-0 w-100 p-4 bg-white m-3 rounded-4 shadow-sm" style="width: calc(100% - 1.5rem) !important; background-color: var(--card-bg) !important;">
+                <h5 class="fw-bold mb-1">Fast & Secure</h5>
+                <p class="text-muted-custom small mb-0">Your medical data is encrypted and handled with the highest enterprise standards.</p>
+            </div>
+        </div>
+        
+        <!-- Form Side -->
+        <div class="col-md-7 p-4 p-lg-5" style="background-color: var(--card-bg) !important;">
+            <div class="mb-5">
+                <h3 class="fw-bold mb-2">Request an Appointment</h3>
+                <p class="text-muted-custom">Fill out the form below and we will confirm your slot immediately.</p>
+            </div>
+            
+            <form id="AppointmentForm" role="form" method="post" action="{% url 'appointment_view' %}">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label" for="name">Patient Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="date">Preferred Date</label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="department">Medical Department</label>
+                        <select name="department" class="form-select" required>
+                            <option value="" disabled selected>Select specialization...</option>
+                            <option value="General Health">General Practice</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Dental">Dental Care</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="phone">Contact Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="(555) 123-4567" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="message">Symptoms or Reason for Visit</label>
+                        <textarea class="form-control" rows="4" id="message" name="message" placeholder="Please provide brief details about your condition..."></textarea>
+                    </div>
+                    <div class="col-12 mt-5">
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill shadow-sm" style="font-size: 1.05rem;">Submit Appointment Request</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 6. CONTACT / MAP SECTION -->
+<div id="contact" class="container py-5 mb-5 text-center">
+    <div class="mb-5">
+        <h2 class="display-6 fw-bold">Find Us</h2>
+        <p class="lead" style="color: var(--text-secondary);">We are centrally located and always here to help you.</p>
+    </div>
+    
+    <div class="hms-card border-0 overflow-hidden p-0 mx-auto shadow-md" style="max-width: 1000px;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3847.4406136807047!2d75.1218962748884!3d15.35260558522783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb8d73bf6a02d87%3A0x6f87c8f3931ba1d8!2sKLE%20Suchirayu%20Hospital!5e0!3m2!1sen!2sin!4v1710340484954!5m2!1sen!2sin" width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen></iframe>
+    </div>
+</div>
+
+{% endblock %}

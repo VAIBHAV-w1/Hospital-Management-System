@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Appointments | Health Center{% endblock %}
+{% block content %}
+<div class="container py-5 my-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 border-bottom pb-4">
+        <div>
+            <h2 class="fw-bold mb-2">Appointments Dashboard</h2>
+            <p class="text-muted-custom mb-0">Track and manage your medical appointments.</p>
+        </div>
+        <div class="mt-4 mt-md-0 position-relative" style="max-width: 350px; width: 100%;">
+            <input type="text" id="searchInput" class="form-control rounded-pill ps-4 shadow-sm border-0 bg-white" placeholder="Search by patient or department..." onkeyup="filterAppointments()" style="background-color: var(--card-bg) !important;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="position-absolute text-muted-custom" style="right: 15px; top: 50%; transform: translateY(-50%);" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Upcoming Appointments -->
+    <div class="mb-5">
+        <h4 class="fw-bold mb-4 d-flex align-items-center gap-2">
+            <span class="bg-primary rounded-circle d-inline-block" style="width: 12px; height: 12px;"></span> Upcoming / Booked
+        </h4>
+        <div class="row g-4" id="upcomingList">
+            {% for appt in upcoming %}
+            <div class="col-md-6 col-lg-4 appt-card-wrapper">
+                <div class="hms-card p-4 h-100 border-0 shadow-sm position-relative overflow-hidden">
+                    <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 4px;"></div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary rounded-pill text-white px-3 py-2 fw-semibold">{{ appt.date }}</span>
+                        <span class="text-muted-custom small fw-semibold text-uppercase">{{ appt.department }}</span>
+                    </div>
+                    <h5 class="fw-bold patient-name mb-1">{{ appt.name }}</h5>
+                    <p class="text-muted-custom small mb-3">📞 {{ appt.phone }} | ✉️ {{ appt.email }}</p>
+                    
+                    {% if appt.message %}
+                    <div class="bg-light p-3 rounded-3 mt-3" style="background-color: var(--input-bg) !important;">
+                        <p class="small text-muted-custom mb-0 fst-italic">"{{ appt.message }}"</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5 hms-card border-0 shadow-sm">
+                <h5 class="text-muted-custom">No upcoming appointments found.</h5>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Completed Appointments -->
+    <div>
+        <h4 class="fw-bold mb-4 d-flex align-items-center gap-2">
+            <span class="bg-secondary rounded-circle d-inline-block" style="width: 12px; height: 12px;"></span> Completed
+        </h4>
+        <div class="row g-4" id="completedList">
+            {% for appt in completed %}
+            <div class="col-md-6 col-lg-4 appt-card-wrapper">
+                <div class="hms-card p-4 h-100 border-0 shadow-sm position-relative overflow-hidden" style="opacity: 0.85;">
+                    <div class="position-absolute top-0 start-0 w-100 bg-secondary" style="height: 4px;"></div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-secondary rounded-pill text-white px-3 py-2 fw-semibold">{{ appt.date }}</span>
+                        <span class="text-muted-custom small fw-semibold text-uppercase">{{ appt.department }}</span>
+                    </div>
+                    <h5 class="fw-bold patient-name mb-1 text-muted">{{ appt.name }}</h5>
+                    <p class="text-muted-custom small mb-0">📞 {{ appt.phone }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5 hms-card border-0 shadow-sm">
+                <p class="text-muted-custom mb-0">No past appointments recorded.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+function filterAppointments() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let cards = document.getElementsByClassName('appt-card-wrapper');
+    
+    for (let i = 0; i < cards.length; i++) {
+        let textContent = cards[i].innerText.toLowerCase();
+        if (textContent.includes(input)) {
+            cards[i].style.display = "";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+</script>
+{% endblock %}

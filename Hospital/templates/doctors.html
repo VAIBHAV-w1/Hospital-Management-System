@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Our Staff | Health Center Management{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="mb-5 border-bottom pb-3">
+        <h2 class="fw-bold text-primary-custom m-0">Medical Specialists</h2>
+        <p class="text-muted-custom mt-2 mb-0">Certified professionals dedicated to clinical excellence.</p>
+    </div>
+    
+    <div class="row g-4">
+        <!-- Static fallback doctors if DB is empty -->
+        {% if not doctors %}
+        <div class="col-md-4">
+            <div class="hms-card text-center p-4 h-100">
+                <img src="/static/asset/images/team-image1.jpg" class="rounded-circle mb-3 border" width="120" height="120" style="object-fit: cover;" alt="Dr. Nate Baston">
+                <h5 class="fw-bold mb-1">Dr. Nate Baston</h5>
+                <p class="text-primary-custom fw-semibold mb-3 small text-uppercase">General Practice</p>
+                <div class="text-muted-custom small">
+                    <p class="mb-1">📞 (886) 776-8430</p>
+                    <p class="mb-0">✉️ n.baston@healthcenter.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hms-card text-center p-4 h-100">
+                <img src="/static/asset/images/team-image2.jpg" class="rounded-circle mb-3 border" width="120" height="120" style="object-fit: cover;" alt="Dr. Jason Stewart">
+                <h5 class="fw-bold mb-1">Dr. Jason Stewart</h5>
+                <p class="text-primary-custom fw-semibold mb-3 small text-uppercase">Cardiology</p>
+                <div class="text-muted-custom small">
+                    <p class="mb-1">📞 (831) 079-3003</p>
+                    <p class="mb-0">✉️ j.stewart@healthcenter.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hms-card text-center p-4 h-100">
+                <img src="/static/asset/images/team-image3.jpg" class="rounded-circle mb-3 border" width="120" height="120" style="object-fit: cover;" alt="Dr. Miasha Nakahara">
+                <h5 class="fw-bold mb-1">Dr. Miasha Nakahara</h5>
+                <p class="text-primary-custom fw-semibold mb-3 small text-uppercase">Dental Care</p>
+                <div class="text-muted-custom small">
+                    <p class="mb-1">📞 (829) 683-5142</p>
+                    <p class="mb-0">✉️ m.nakahara@healthcenter.com</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Dynamic doctors from DB -->
+        {% for doctor in doctors %}
+        <div class="col-md-4">
+            <div class="hms-card text-center p-4 h-100">
+                <div class="mb-3 rounded-circle mx-auto d-flex align-items-center justify-content-center border bg-light text-secondary" style="width: 120px; height: 120px; font-size: 2.5rem; font-weight: 300;">
+                    {{ doctor.name|make_list|first|default:"D"|upper }}
+                </div>
+                <h5 class="fw-bold mb-1">{{ doctor.name }}</h5>
+                <p class="text-primary-custom fw-semibold mb-3 small text-uppercase">{{ doctor.specialization|default:"Specialist" }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
